@@ -1,0 +1,35 @@
+Class PasswordChecker
+
+
+Package Exceptions:
+
+UnmatchedException Extends Exceptions: * used when passwords dont match
+    Default constructor() no params
+    Constructor (message) ->  message gets stored in super()
+
+LengthException Extends Exceptions: * used when password is < 6 characters
+    Default constructor() no params
+    Constructor (message) ->  message gets stored in super()
+
+NoDigitException Extends Exceptions: * used when password contains no numerical values
+    Default constructor() no params
+    Constructor (message) ->  message gets stored in super()
+
+NoUpperAlphaException Extends Exceptions: * used when password contains no uppercase characters
+    Default constructor() no params
+    Constructor (message) ->  message gets stored in super()
+
+NoLowerAlphaException Extends Exceptions: * used when password contains no lowercase characters
+    Default constructor() no params
+    Constructor (message) ->  message gets stored in super()
+
+NoSpecialCharactersException Extends Exceptions: * used when password contains no special characters
+    Default constructor() no params
+    Constructor (message) ->  message gets stored in super()
+
+InvalidSequenceException Extends Exceptions: * used when password contains no 2 of the same characters in a row
+    Default constructor() no params
+    Constructor (message) ->  message gets stored in super()
+
+
+
