@@ -31,8 +31,8 @@ public class GradeBookTest {
     public void addScoreTest(){
         g1.addScore(100);
         g2.addScore(100);
-        assertEquals(g1.toString(), "60.0 70.0 80.0 90.0 100.0 ");
-        assertEquals(g2.toString(), "80.0 85.0 90.0 95.0 100.0 ");
+        assertEquals("60.0 70.0 80.0 90.0 100.0 ", g1.toString());
+        assertEquals("80.0 85.0 90.0 95.0 100.0 ", g2.toString());
     }
 
     @Test
@@ -49,17 +49,19 @@ public class GradeBookTest {
 
     @Test
     public void finalScoreTest(){
-
+        assertEquals(240,g1.finalScore(),.0001);
+        assertEquals(270,g2.finalScore(),.0001);
     }
 
     @Test
     public void getScoreSizeTest(){
-
+        assertEquals(5,g1.getScoreSize(),.0001);
+        assertEquals(5,g2.getScoreSize(),.0001);
     }
 
     @Test
     public void toStringTest(){
-
+        assertTrue(g1.toString().equals("60.0 70.0 80.0 90.0 "));
+        assertTrue(g2.toString().equals("80.0 85.0 90.0 95.0 "));
     }
-
 }

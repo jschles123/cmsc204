@@ -91,9 +91,12 @@ public class GradeBook
     public String toString(){
         String str = "";
         for(double i :scores){
-            str += i + " ";
+            if (!(i == 0.0)) {
+                str += i + " ";
+            }
         }
         return str;
     }
 }
+
 
