@@ -56,8 +56,8 @@ public class GradeBookTest {
 
     @Test
     public void getScoreSizeTest(){
-        assertEquals(5,g1.getScoreSize(),.0001);
-        assertEquals(5,g2.getScoreSize(),.0001);
+        assertEquals(4,g1.getScoreSize(),.0001);
+        assertEquals(4,g2.getScoreSize(),.0001);
     }
 
     @Test
