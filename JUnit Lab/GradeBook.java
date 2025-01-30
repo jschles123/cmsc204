@@ -98,6 +98,9 @@ public class GradeBook
                 str += i + " ";
             }
         }
+        if (str.length() > 1){
+            return str.substring(0, str.length() - 1);
+        }
         return str;
     }
 }
