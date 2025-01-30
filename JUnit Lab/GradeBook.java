@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-
 public class GradeBook
 {
     private double[] scores;
@@ -82,8 +80,13 @@ public class GradeBook
      @return the length for this gradebook
      */
     public int getScoreSize(){
-        return scores.length;
-
+        int count = 0;
+        for(double i : scores){
+            if (i != 0.0){
+                count ++;
+            }
+        }
+        return count;
     }
     /**
      @return each score in this grade book with a space after

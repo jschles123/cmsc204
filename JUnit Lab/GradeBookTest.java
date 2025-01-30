@@ -1,15 +1,16 @@
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.AfterEach;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class GradeBookTest {
 
     private GradeBook g1;
     private GradeBook g2;
 
-    @BeforeEach
+    @Before
     public void setUp() {
         g1 = new GradeBook(5);
         g2 = new GradeBook(5);
@@ -21,7 +22,7 @@ public class GradeBookTest {
             g2.addScore(i);
         }
     }
-    @AfterEach
+    @After
     public void tearDown() {
         g1 = null;
         g2 = null;
