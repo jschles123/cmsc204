@@ -29,10 +29,6 @@ public class BasicDoubleLinkedList<T>{
     }
 
 
-
-
-
-
     /**
      * Adds to head of linked list
      * @param data
@@ -75,14 +71,14 @@ public class BasicDoubleLinkedList<T>{
      * @throws UnderFlowException
      */
 
-    public T removeFirst() throws UnderFlowException {
+    public T removeFirst(){
         int size = this.getSize();
         Node<T> temp = this.head;
         if(size == 1){
             this.head = this.tail = null;
             return temp.getData();
         }else if(size == 0){
-            throw new UnderFlowException("why no workie");
+            throw new NullPointerException();
         }else if(size == 2){
             this.tail.next = this.tail.prev = null;
             this.head = this.tail;
@@ -92,22 +88,22 @@ public class BasicDoubleLinkedList<T>{
             this.head.prev = null;
             return temp.getData();
         }else{
-            throw new UnderFlowException("sizie no workie");
+            throw new NullPointerException();
         }
     }
 
     /**
      * Removes tail from linked list
      * @return previous tail
-     * @throws UnderFlowException
+     * @throws NullPointerException
      */
 
 
-    public T removeLast() throws UnderFlowException{
+    public T removeLast() {
         int size = this.getSize();
         Node<T> temp = this.tail;
         if(size == 0){
-            throw new UnderFlowException();
+            throw new NullPointerException();
         }else if(size == 1){
             this.head = this.tail = null;
             System.out.println(temp);
@@ -123,9 +119,15 @@ public class BasicDoubleLinkedList<T>{
             return temp.getData();
         }
         else{
-            throw new UnderFlowException();
+            throw new NullPointerException();
         }
     }
+
+    /**
+     * This method removes an item from anywhere linked list without the index
+     * @param data data this is being removed
+     * @param comparator comparator class for data
+     */
 
     public void remove(T data, Comparator<T> comparator) {
         if (head == null) return; // Empty list case
@@ -156,8 +158,8 @@ public class BasicDoubleLinkedList<T>{
 
 
     /**
-     * Gets the data from head of linked list
-     * @return head
+     * Returns the data from head of linked list
+     * @return head data
      */
 
 
@@ -166,7 +168,8 @@ public class BasicDoubleLinkedList<T>{
     }
 
     /**
-     *
+     * Returns Node object from head of linked list
+     * @return head Node
      */
     public Node<T> getHead(){
         return this.head;
@@ -174,8 +177,8 @@ public class BasicDoubleLinkedList<T>{
 
 
     /**
-     * Gets tail of linked list
-     * @return tail
+     * Returns the data from tail of linked list
+     * @return tail data
      */
 
 
@@ -184,8 +187,8 @@ public class BasicDoubleLinkedList<T>{
     }
 
     /**
-     * Gets data from tail of linked list
-     * @return data of tail
+     * Returns Node object from tail of linked list
+     * @return tail Node
      */
 
     public Node<T> getTail() {
@@ -226,7 +229,7 @@ public class BasicDoubleLinkedList<T>{
     }
 
     /**
-     *
+     * Returns current size of Linked List
      * @return current size of list
      */
     public int getSize(){
@@ -242,6 +245,11 @@ public class BasicDoubleLinkedList<T>{
         }
     }
 
+    /**
+     * Returns a ArrayList with Linked List data
+     * @return ArrayList full of Linked List data
+     */
+
     public ArrayList<T> toArrayList() {
         Node<T> temp = this.head;
         ArrayList<T> list = new ArrayList<>();
@@ -252,19 +260,41 @@ public class BasicDoubleLinkedList<T>{
         return list;
     }
 
+    /**
+     * Creates a new Iterator for this Linked List reference
+     * @return new List Iterator
+     */
 
     public ListIterator<T> iterator(){
         return new DoubleLinkedListIterator<T>(this.head);
     }
 
+    /**
+     * Removes the tail Node from Linked List and returns its data
+     * @return Last items data
+     */
+
     public T retrieveLastElement() {
-        return this.tail.getData();
+        T temp = this.tail.getData();
+        this.removeLast();
+        return temp;
     }
+
+    /**
+     * Removes the head NOde from Linked List and returns its data
+     * @return First items data
+     */
 
     public T retrieveFirstElement() {
-        return this.head.getData();
+        T temp = this.head.getData();
+        this.removeFirst();
+        return temp;
     }
 
+    /**
+     * Node class used by Linked List
+     * @param <T>
+     */
 
     protected class Node<T>{
 
@@ -321,30 +351,45 @@ public class BasicDoubleLinkedList<T>{
         private Node<T> prev;
         private int lastOperation;
 
+        /**
+         * Constructor
+         * @param head Head of Linked List
+         */
+
         DoubleLinkedListIterator(Node<T> head){
             this.curr = head;
             this.prev = null;
             this.lastOperation = -1;
         }
 
+        /**
+         * Checks if there is a next node in the linked list including edge case where the current is null but you have just preformed a prev operation
+         * @return if there is a next element
+         */
+
         @Override
         public boolean hasNext() {
             if(curr == null){
+                //checks if prev() was last operation
                 if(lastOperation == 1){
                     return prev != null;
                 }
                 return false;
             }else{
-                System.out.println(curr + " " + curr.next + " this is curr and curr.next");
                 return curr != null;
             }
         }
 
+        /**
+         * Moves the iterator over 1 position and returns the nodes data it skipped over
+         * @return Next nodes data
+         */
         @Override
         public T next() {
             if(!this.hasNext()){
                 throw new NoSuchElementException();
             }
+            //checks if last operation is prev()
             if(lastOperation == 1){
                 lastOperation = 0;
                 curr = prev;
@@ -358,9 +403,16 @@ public class BasicDoubleLinkedList<T>{
             }
         }
 
+
+        /**
+         * Checks if there is a prev node in the linked list including edge case where the current is null but you have just preformed a next operation
+         * @return if there is a prev element
+         */
+
         @Override
         public boolean hasPrevious() {
             if(curr == null){
+                //checks if last operation is next()
                 if(lastOperation == 0){
                     return prev != null;
                 }
@@ -370,16 +422,22 @@ public class BasicDoubleLinkedList<T>{
             }
         }
 
+        /**
+         * Moves the iterator over 1 position and returns the nodes data it skipped over
+         * @return Prev nodes data
+         */
+
         @Override
         public T previous() {
             if(!this.hasPrevious()){
                 throw new NoSuchElementException();
             }
+            //checks if last operation is next()
             if(lastOperation == 0){
                 lastOperation = 1;
-                curr = prev;
-                prev = null;
-                return curr.getData();
+                curr = prev.prev;
+                prev = curr.next;
+                return prev.getData();
             }else{
                 lastOperation = 1;
                 prev = curr;
@@ -388,29 +446,51 @@ public class BasicDoubleLinkedList<T>{
             }
         }
 
+        /**
+         * Unsupported operation
+         * @return
+         * @throws UnsupportedOperationException
+         */
+
         @Override
         public int nextIndex() throws UnsupportedOperationException {
             throw new UnsupportedOperationException();
 
         }
-
+        /**
+         * Unsupported operation
+         * @return
+         * @throws UnsupportedOperationException
+         */
         @Override
         public int previousIndex() throws UnsupportedOperationException {
             throw new UnsupportedOperationException();
 
         }
-
+        /**
+         * Unsupported operation
+         * @return
+         * @throws UnsupportedOperationException
+         */
         @Override
         public void remove() throws UnsupportedOperationException {
             throw new UnsupportedOperationException();
         }
-
+        /**
+         * Unsupported operation
+         * @return
+         * @throws UnsupportedOperationException
+         */
         @Override
         public void set(T t) throws UnsupportedOperationException {
             throw new UnsupportedOperationException();
 
         }
-
+        /**
+         * Unsupported operation
+         * @return
+         * @throws UnsupportedOperationException
+         */
         @Override
         public void add(T t) throws UnsupportedOperationException {
             throw new UnsupportedOperationException();
