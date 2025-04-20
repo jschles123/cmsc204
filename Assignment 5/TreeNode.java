@@ -1,3 +1,8 @@
+/**
+ * @author Joshua Schlesinger-Guevara
+ * @param <T>
+ */
+
 public class TreeNode<T> {
 
     public TreeNode<T> left;
@@ -8,6 +13,12 @@ public class TreeNode<T> {
         this.data = data;
         this.right = null;
         this.left = null;
+    }
+
+    public TreeNode(T data, TreeNode<T> left, TreeNode<T> right) {
+        this.data = data;
+        this.left = left;
+        this.right = right;
     }
 
     public TreeNode(TreeNode<T> copy) {
