@@ -1,7 +1,19 @@
-import java.util.ArrayList;
-import java.util.Set;
+import java.util.*;
 
-public class Graph implements GraphInterface{
+public class Graph implements GraphInterface<Town,Road>{
+
+    private ArrayList<Town> towns;
+    private ArrayList<Road> roads;
+    private HashMap<Town,Integer> roadMap;
+    private ArrayList<Integer> shortestPath;
+
+    public Graph() {
+        this.towns = new ArrayList<>();
+        this.roads = new ArrayList<>();
+        this.roadMap = new HashMap<>();
+    }
+
+
     /**
      * Returns an edge connecting source vertex to target vertex if such
      * vertices and such edge exist in this graph. Otherwise returns
@@ -16,7 +28,14 @@ public class Graph implements GraphInterface{
      * @return an edge connecting source vertex to target vertex.
      */
     @Override
-    public Object getEdge(Object sourceVertex, Object destinationVertex) {
+    public Road getEdge(Town sourceVertex, Town destinationVertex) {
+        for(Road road : roads) {
+            if (road.getTown1().equals(sourceVertex) && road.getTown2().equals(destinationVertex)) {
+                return road;
+            }else if(road.getTown2().equals(sourceVertex) && road.getTown1().equals(destinationVertex)) {
+                return road;
+            }
+        }
         return null;
     }
 
@@ -38,8 +57,10 @@ public class Graph implements GraphInterface{
      * @throws NullPointerException     if any of the specified vertices is null.
      */
     @Override
-    public Object addEdge(Object sourceVertex, Object destinationVertex, int weight, String description) {
-        return null;
+    public Road addEdge(Town sourceVertex, Town destinationVertex, int weight, String description) {
+        Road temp = new Road(sourceVertex, destinationVertex, weight, description);
+        this.roads.add(temp);
+        return temp;
     }
 
     /**
@@ -51,14 +72,18 @@ public class Graph implements GraphInterface{
      * with the restriction on constructors, this ensures that graphs never
      * contain duplicate vertices.
      *
-     * @param o vertex to be added to this graph.
+     * @param town vertex to be added to this graph.
      * @return true if this graph did not already contain the specified
      * vertex.
      * @throws NullPointerException if the specified vertex is null.
      */
     @Override
-    public boolean addVertex(Object o) {
-        return false;
+    public boolean addVertex(Town town) {
+        if(towns.contains(town)){
+            return false;
+        }
+        towns.add(town);
+        return true;
     }
 
     /**
@@ -73,7 +98,14 @@ public class Graph implements GraphInterface{
      * @return true if this graph contains the specified edge.
      */
     @Override
-    public boolean containsEdge(Object sourceVertex, Object destinationVertex) {
+    public boolean containsEdge(Town sourceVertex, Town destinationVertex) {
+        for(Road road : roads){
+            if(road.getTown1() == sourceVertex && road.getTown2() == destinationVertex){
+                return true;
+            }else if(road.getTown2() == sourceVertex && road.getTown1() == destinationVertex){
+                return true;
+            }
+        }
         return false;
     }
 
@@ -83,12 +115,12 @@ public class Graph implements GraphInterface{
      * vertex u such that u.equals(v). If the
      * specified vertex is null returns false.
      *
-     * @param o vertex whose presence in this graph is to be tested.
+     * @param town vertex whose presence in this graph is to be tested.
      * @return true if this graph contains the specified vertex.
      */
     @Override
-    public boolean containsVertex(Object o) {
-        return false;
+    public boolean containsVertex(Town town) {
+        return towns.contains(town);
     }
 
     /**
@@ -100,9 +132,8 @@ public class Graph implements GraphInterface{
      * @return a set of the edges contained in this graph.
      */
     @Override
-    public Set edgeSet() {
-        return Set.of();
-    }
+    public Set<Road> edgeSet() {
+        return new HashSet<Road>(this.roads);    }
 
     /**
      * Returns a set of all edges touching the specified vertex (also
@@ -116,8 +147,14 @@ public class Graph implements GraphInterface{
      * @throws NullPointerException     if vertex is null.
      */
     @Override
-    public Set edgesOf(Object vertex) {
-        return Set.of();
+    public Set<Road> edgesOf(Town vertex) {
+        Set<Road> edges = new HashSet<>();
+        for(Road road : this.roads) {
+            if(road.getTown1() == vertex || road.getTown2() == vertex) {
+                edges.add(road);
+            }
+        }
+        return edges;
     }
 
     /**
@@ -137,7 +174,16 @@ public class Graph implements GraphInterface{
      * @return The removed edge, or null if no edge removed.
      */
     @Override
-    public Object removeEdge(Object sourceVertex, Object destinationVertex, int weight, String description) {
+    public Road removeEdge(Town sourceVertex, Town destinationVertex, int weight, String description) {
+        for(Road road : roads){
+            if(road.getTown1() == sourceVertex && road.getTown2() == destinationVertex){
+                Road temp = road;
+                this.roads.remove(road);
+            }else if(road.getTown2() == sourceVertex && road.getTown1() == destinationVertex){
+                Road temp = road;
+                this.roads.remove(road);
+            }
+        }
         return null;
     }
 
@@ -152,12 +198,17 @@ public class Graph implements GraphInterface{
      * <p>
      * If the specified vertex is null returns false.
      *
-     * @param o vertex to be removed from this graph, if present.
+     * @param town vertex to be removed from this graph, if present.
      * @return true if the graph contained the specified vertex;
      * false otherwise.
      */
     @Override
-    public boolean removeVertex(Object o) {
+    public boolean removeVertex(Town town) {
+        for(Town vertex : towns){
+            if(vertex.equals(town)){
+                return towns.remove(vertex);
+            }
+        }
         return false;
     }
 
@@ -170,8 +221,8 @@ public class Graph implements GraphInterface{
      * @return a set view of the vertices contained in this graph.
      */
     @Override
-    public Set vertexSet() {
-        return Set.of();
+    public Set<Town> vertexSet() {
+        return new HashSet<Town>(this.towns);
     }
 
     /**
@@ -190,8 +241,11 @@ public class Graph implements GraphInterface{
      * Vertex_8 via Edge_9 to Vertex_10 2 (third string in ArrayList)
      */
     @Override
-    public ArrayList<String> shortestPath(Object sourceVertex, Object destinationVertex) {
-        return null;
+    public ArrayList<String> shortestPath(Town sourceVertex, Town destinationVertex) {
+        this.shortestPath = new ArrayList<>();
+        this.dijkstraShortestPath(destinationVertex);
+        ArrayList<String> shortestPathStr = new ArrayList<>();
+        return shortestPathStr;
     }
 
     /**
@@ -202,7 +256,37 @@ public class Graph implements GraphInterface{
      * @param sourceVertex the vertex to find shortest path from
      */
     @Override
-    public void dijkstraShortestPath(Object sourceVertex) {
+    public void dijkstraShortestPath(Town sourceVertex) {
 
     }
+
+    public Town getVertex(String name) {
+        for(Town i : this.towns) {
+            if(i.getName() == name){
+                return i;
+            }
+        }
+        return null;
+    }
+
+    public ArrayList<String> getTowns(){
+        ArrayList<String> temp = new ArrayList<>();
+        for(Town i : this.towns) {
+            temp.add(i.getName());
+        }
+        Collections.sort(temp);
+        return temp;
+    }
+
+    public Road getRoad(String r1, String r2) {
+        for(Road i : this.roads) {
+            if(i.getTown1().getName().equals(r1) && i.getTown2().getName().equals(r2)) {
+                return i;
+            } else if (i.getTown1().getName().equals(r2) && i.getTown2().getName().equals(r1)) {
+                return i;
+            }
+        }
+        return null;
+    }
+
 }
